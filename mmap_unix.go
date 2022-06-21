@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build darwin || dragonfly || freebsd || linux || openbsd || solaris || netbsd
 // +build darwin dragonfly freebsd linux openbsd solaris netbsd
 
 package mmap
@@ -36,6 +37,10 @@ func mmap(len int, inprot, inflags, fd uintptr, off int64) ([]byte, error) {
 
 func (m MMap) flush() error {
 	return unix.Msync([]byte(m), unix.MS_SYNC)
+}
+
+func (m MMap) flushAsync() error {
+	return unix.Msync([]byte(m), unix.MS_ASYNC)
 }
 
 func (m MMap) lock() error {

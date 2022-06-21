@@ -111,6 +111,23 @@ func (m MMap) flush() error {
 	return nil
 }
 
+func (m MMap) flushAsync() error {
+	addr, len := m.addrLen()
+	errno := windows.FlushViewOfFile(addr, len) // doesn't wait
+	if errno != nil {
+		return os.NewSyscallError("FlushViewOfFile", errno)
+	}
+
+	handleLock.Lock()
+	defer handleLock.Unlock()
+	handle, ok := handleMap[addr]
+	if !ok {
+		// should be impossible; we would've errored above
+		return errors.New("unknown base address")
+	}
+	return nil
+}
+
 func (m MMap) lock() error {
 	addr, len := m.addrLen()
 	errno := windows.VirtualLock(addr, len)
