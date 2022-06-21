@@ -18,6 +18,10 @@ func (m MMap) flushAsync() error {
 	return syscall.EPLAN9
 }
 
+func (m MMap) flushAsyncAt(off, length int64) error {
+	return syscall.EPLAN9
+}
+
 func (m MMap) lock() error {
 	return syscall.EPLAN9
 }
