@@ -104,9 +104,12 @@ func (m MMap) Flush() error {
 	return m.flush()
 }
 
-// FlushAsync synchronizes the mapping's contents to the file's contents on disk.
 func (m MMap) FlushAsync() error {
 	return m.flushAsync()
+}
+
+func (m MMap) FlushAsyncAt(off, length int64) error {
+	return m.flushAsyncAt(off, length)
 }
 
 // Unmap deletes the memory mapped region, flushes any remaining changes, and sets
