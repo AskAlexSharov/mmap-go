@@ -1,4 +1,4 @@
-module github.com/edsrzf/mmap-go
+module github.com/AskAlexSharov/mmap-go
 
 go 1.17
 
