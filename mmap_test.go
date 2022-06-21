@@ -198,4 +198,5 @@ func TestFlushAsync(t *testing.T) {
 	// leave things how we found them
 	mmap[9] = '9'
 	mmap.flushAsyncAt(9, 1)
+
 }
