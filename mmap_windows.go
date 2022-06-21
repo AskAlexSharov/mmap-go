@@ -117,14 +117,6 @@ func (m MMap) flushAsync() error {
 	if errno != nil {
 		return os.NewSyscallError("FlushViewOfFile", errno)
 	}
-
-	handleLock.Lock()
-	defer handleLock.Unlock()
-	handle, ok := handleMap[addr]
-	if !ok {
-		// should be impossible; we would've errored above
-		return errors.New("unknown base address")
-	}
 	return nil
 }
 
