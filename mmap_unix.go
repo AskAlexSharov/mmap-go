@@ -43,6 +43,10 @@ func (m MMap) flushAsync() error {
 	return unix.Msync([]byte(m), unix.MS_ASYNC)
 }
 
+func (m MMap) flushAsyncAt(off, length int64) error {
+	return unix.Msync([]byte(m[off:off+length]), unix.MS_ASYNC)
+}
+
 func (m MMap) lock() error {
 	return unix.Mlock([]byte(m))
 }

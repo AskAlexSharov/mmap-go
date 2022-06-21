@@ -171,3 +171,31 @@ func TestAnonymousMapping(t *testing.T) {
 		t.Fatalf("failed to unmap memory for buffer: %v", err)
 	}
 }
+
+func TestFlushAsync(t *testing.T) {
+	f := openFile(os.O_RDWR)
+	defer f.Close()
+	mmap, err := Map(f, RDWR, 0)
+	if err != nil {
+		t.Errorf("error mapping: %s", err)
+	}
+	defer mmap.Unmap()
+	if !bytes.Equal(testData, mmap) {
+		t.Errorf("mmap != testData: %q, %q", mmap, testData)
+	}
+
+	mmap[9] = 'X'
+	mmap.flushAsyncAt(9, 1)
+
+	fileData, err := ioutil.ReadAll(f)
+	if err != nil {
+		t.Errorf("error reading file: %s", err)
+	}
+	if !bytes.Equal(fileData, []byte("012345678XABCDEF")) {
+		t.Errorf("file wasn't modified")
+	}
+
+	// leave things how we found them
+	mmap[9] = '9'
+	mmap.flushAsyncAt(9, 1)
+}
